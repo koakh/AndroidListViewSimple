@@ -5,7 +5,6 @@ package com.koakh.listviewsimple;
  */
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +12,11 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
+
+//notifyDataSetChanged
+//For an ArrayAdapter, notifyDataSetChanged only works if you use the add(), insert(), remove(), and clear() on the Adapter.
+//http://stackoverflow.com/questions/3669325/notifydatasetchanged-example
 
 public class Adapter extends ArrayAdapter<Box> {
 
@@ -26,22 +28,6 @@ public class Adapter extends ArrayAdapter<Box> {
     super(context, 0);
     this.context = context;
     this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-  }
-
-  public void mockData() {
-
-    int mockSize = 100;
-    int mockPosition = 100;
-    ArrayList<Box> boxList = new ArrayList<>();
-
-
-    for (int i = 0; i < mockSize; i++) {
-      mockPosition = i * 10;
-      boxList.add(new Box((long) mockPosition, String.format("Box %d", mockPosition), mockPosition * 10, String.format("Description Box %d", mockPosition)));
-      Log.d(TAG, String.format("mockData: %d", mockPosition));
-    }
-
-    updateData(boxList);
   }
 
   public void updateData(List<Box> boxList) {

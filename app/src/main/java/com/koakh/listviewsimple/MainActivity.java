@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     //Setup ListView and Adapter
     lvItemList = (ListView) this.findViewById(R.id.lvItemList);
     boxAdapter = new Adapter(MainActivity.this);
-    boxAdapter.mockData();
+    boxAdapter.updateData(BoxRepository.getAllBoxes(MainActivity.this));
     lvItemList.setAdapter(boxAdapter);
 
     //Setup Buttons

@@ -50,9 +50,11 @@ public class EditBoxActivity extends Activity {
           } else {
             box.setId(boxId);
           }
+          //Assign inpit data to box
           box.setName(etBoxName.getText().toString());
           box.setSlots(Integer.parseInt(etBoxSlots.getText().toString()));
           box.setDescription(etBoxDescription.getText().toString());
+          //Update Repository with updated box
           BoxRepository.insertOrUpdate(EditBoxActivity.this, box);
           finish();
         } else {
