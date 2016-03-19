@@ -2,6 +2,7 @@ package com.koakh.listviewsimple;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,11 +16,12 @@ public class BoxRepository {
     return repositoryData.get((int) id);
   }
 
-  public static List<Box> getAllBoxes(Context context) {
+  public static ArrayList<Box> getAllBoxes(Context context) {
 
     if (repositoryData == null) {
       int mockSize = 1000;
       int mockPosition = 100;
+
       repositoryData = new ArrayList<Box>();
 
       for (int i = 0; i < mockSize; i++) {
