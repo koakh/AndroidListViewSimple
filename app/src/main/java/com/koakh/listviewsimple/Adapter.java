@@ -14,11 +14,6 @@ import android.widget.TextView;
 
 import java.util.List;
 
-//notifyDataSetChanged
-//For an ArrayAdapter, notifyDataSetChanged only works if you use the add(), insert(), remove(), and clear() on the Adapter.
-//http://stackoverflow.com/questions/3669325/notifydatasetchanged-example
-//http://androidadapternotifiydatasetchanged.blogspot.pt/
-
 public class Adapter extends BaseAdapter {
 
   private String TAG = "listviewsimple";
