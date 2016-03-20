@@ -2,16 +2,18 @@
 
   <!-- Application -->
   <string name="app_name">ListViewSimple</string>
-  <string name="action_settings">Settings</string>
 
   <!-- Application Menu -->
   <string name="action_menu_add_item">Add item</string>
+  <string name="action_menu_delete_item">Delete item</string>
+  <string name="action_menu_add_items">Add items</string>
   <string name="action_menu_delete_items">Delete items</string>
+  <string name="action_menu_settings">Settings</string>
 
   <!-- ListView Adapter Labels -->
   <string name="tv_label_item_id">Item id: </string>
   <string name="tv_label_box_name">Box name: </string>
-  <string name="tv_label_box_size">Box slots: </string>
+  <string name="tv_label_box_slot">Box slots: </string>
   <string name="tv_label_box_description">Box description: </string>
 
   <!-- ListView ItemBox Row -->
@@ -31,5 +33,6 @@
   <string name="dialog_delete_items_content">Do you want to delete all items from list?</string>
   <string name="dialog_delete_item_title">Delete item</string>
   <string name="dialog_delete_item_content">Do you want to delete this item?</string>
+  <string name="title_activity_main2">Main2Activity</string>
 
 </resources>

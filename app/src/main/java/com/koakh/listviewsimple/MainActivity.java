@@ -6,16 +6,23 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
-  private ListView lvItemList;
-  private Adapter boxAdapter;
+  private static App mApp = App.getInstance();
+  private ListView mListView;
+  private int mListViewPosition;
+  private Long mListViewId;
+  private Adapter mAdapter;
+  private ArrayList<Box> mBoxList;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -34,10 +41,13 @@ public class MainActivity extends AppCompatActivity {
     });
 
     //Setup ListView and Adapter
-    lvItemList = (ListView) this.findViewById(R.id.lvItemList);
-    boxAdapter = new Adapter(MainActivity.this);
-    boxAdapter.updateData(BoxRepository.getAllBoxes(MainActivity.this));
-    lvItemList.setAdapter(boxAdapter);
+    mListView = (ListView) this.findViewById(R.id.lvItemList);
+    mBoxList = BoxRepository.getAllBoxes(MainActivity.this);
+    mAdapter = new Adapter(MainActivity.this, mBoxList);
+    //Add Adapter reference to Singleton
+    BoxRepository.setAdapter(mAdapter);
+
+    mListView.setAdapter(mAdapter);
 
     //Setup Buttons
     setupButtons();
@@ -58,8 +68,23 @@ public class MainActivity extends AppCompatActivity {
     int id = item.getItemId();
 
     //noinspection SimplifiableIfStatement
-    if (id == R.id.action_settings) {
-      return true;
+    switch(id) {
+      case R.id.action_add_item:
+        addItem();
+        break;
+      case R.id.action_menu_delete_item:
+        deleteItem();
+        break;
+      case R.id.action_menu_add_items:
+        addItems();
+        break;
+      case R.id.action_menu_delete_items:
+        deleteItems();
+        break;
+      case R.id.action_settings:
+        break;
+      default:
+        break;
     }
 
     return super.onOptionsItemSelected(item);
@@ -69,21 +94,41 @@ public class MainActivity extends AppCompatActivity {
 
   //ListView click listener, on row click, edit record
   private void setupButtons() {
-    lvItemList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+    mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
       @Override
       public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent editItemIntent = new Intent(MainActivity.this, EditBoxActivity.class);
 
-        Box clickedBox = boxAdapter.getItem(position);
-        editItemIntent.putExtra("boxId", clickedBox.getId());
+        mListViewPosition = position;
+        mListViewId = id;
+        Log.d(App.getTAG(), String.format("onItemClick: Position [%d] Id: [%d]", mListViewPosition, mListViewId));
 
-        startActivity(editItemIntent);
+        Intent editActivityIntent = new Intent(MainActivity.this, EditBoxActivity.class);
+
+        Box clickedBox = mAdapter.getItem(position);
+        editActivityIntent.putExtra("boxId", clickedBox.getId());
+
+        startActivity(editActivityIntent);
       }
     });
   }
 
-  private void createItem() {
-    Intent addBoxActivityIntent = new Intent(MainActivity.this, EditBoxActivity.class);
-    startActivity(addBoxActivityIntent);
+  /**
+   * Menu Actions
+   */
+
+  private void addItem() {
+    Intent addActivityIntent = new Intent(MainActivity.this, EditBoxActivity.class);
+    startActivity(addActivityIntent);
   }
+
+  private void deleteItem() {
+    BoxRepository.deleteBoxWithId(MainActivity.this, mListViewId);
+  }
+
+  private void addItems() {
+  }
+
+  private void deleteItems() {
+  }
+
 }

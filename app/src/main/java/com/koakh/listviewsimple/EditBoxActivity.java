@@ -1,9 +1,9 @@
 package com.koakh.listviewsimple;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -12,7 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class EditBoxActivity extends Activity {
+public class EditBoxActivity extends AppCompatActivity {
 
   private Button btnSave;
   private EditText etBoxName;
@@ -26,14 +26,16 @@ public class EditBoxActivity extends Activity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_edit_box);
+
     btnSave = (Button) findViewById(R.id.btnSave);
     etBoxName = (EditText) findViewById(R.id.etBoxName);
     etBoxSlots = (EditText) findViewById(R.id.etBoxSlots);
     etBoxDescription = (EditText) findViewById(R.id.etBoxDescription);
 
+    //Assign boxId and box from bundle Extras
     if (getIntent() != null && getIntent().getExtras() != null) {
       boxId = getIntent().getExtras().getLong("boxId");
-      box = BoxRepository.getBoxForId(EditBoxActivity.this, boxId);
+      box = BoxRepository.getFromObjectId(EditBoxActivity.this, boxId);
     }
 
     setupButtons();
@@ -47,10 +49,11 @@ public class EditBoxActivity extends Activity {
         if (validateFields()) {
           if (box == null) {
             box = new Box();
+            box.setId(BoxRepository.getNextId());
           } else {
             box.setId(boxId);
           }
-          //Assign inpit data to box
+          //Assign input data to box
           box.setName(etBoxName.getText().toString());
           box.setSlots(Integer.parseInt(etBoxSlots.getText().toString()));
           box.setDescription(etBoxDescription.getText().toString());

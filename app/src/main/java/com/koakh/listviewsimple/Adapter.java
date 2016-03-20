@@ -8,7 +8,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -17,19 +17,39 @@ import java.util.List;
 //notifyDataSetChanged
 //For an ArrayAdapter, notifyDataSetChanged only works if you use the add(), insert(), remove(), and clear() on the Adapter.
 //http://stackoverflow.com/questions/3669325/notifydatasetchanged-example
+//http://androidadapternotifiydatasetchanged.blogspot.pt/
 
-public class Adapter extends ArrayAdapter<Box> {
+public class Adapter extends BaseAdapter {
 
   private String TAG = "listviewsimple";
-  private LayoutInflater inflater;
-  private Context context;
+  private LayoutInflater mLayoutInflater;
+  private Context mContext;
+  private List<Box> mList;
 
-  public Adapter(Context context) {
-    super(context, 0);
-    this.context = context;
-    this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+  //Constructor
+  public Adapter(Context context, List<Box> list) {
+    this.mContext = context;
+    this.mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    //Store BoxRepository Reference
+    this.mList = list;
   }
 
+  @Override
+  public int getCount() {
+    return mList.size();
+  }
+
+  @Override
+  public Box getItem(int position) {
+    return mList.get(position);
+  }
+
+  @Override
+  public long getItemId(int position) {
+    return position;
+  }
+
+  /*
   public void updateData(List<Box> boxList) {
     this.clear();
     for (Box aBoxList : boxList) {
@@ -39,18 +59,19 @@ public class Adapter extends ArrayAdapter<Box> {
     // View reflecting the data set should refresh itself.
     notifyDataSetChanged();
   }
+  */
 
   @Override
   public View getView(int position, View convertView, ViewGroup parent) {
     final ViewHolder viewHolder;
 
     if (convertView == null) {
-      convertView = inflater.inflate(R.layout.item_box, null);
+      convertView = mLayoutInflater.inflate(R.layout.item_box, null);
       viewHolder = new ViewHolder();
       viewHolder.root = (LinearLayout) convertView.findViewById(R.id.boxItem);
       viewHolder.tvId = (TextView) convertView.findViewById(R.id.tvItemId);
       viewHolder.tvName = (TextView) convertView.findViewById(R.id.tvName);
-      viewHolder.tvSize = (TextView) convertView.findViewById(R.id.tvSize);
+      viewHolder.tvSlots = (TextView) convertView.findViewById(R.id.tvSize);
       viewHolder.tvDescription = (TextView) convertView.findViewById(R.id.tvDescription);
       convertView.setTag(viewHolder);
     } else {
@@ -62,27 +83,43 @@ public class Adapter extends ArrayAdapter<Box> {
     return convertView;
   }
 
+  private void fillViewWithData(int position, ViewHolder viewHolder) {
+    viewHolder.tvId.setText(String.format("%s %s",
+      mContext.getString(R.string.tv_label_item_id),
+      getItem(position).getId().toString()
+      )
+    );
+    viewHolder.tvName.setText(String.format("%s %s",
+        mContext.getString(R.string.tv_label_box_name),
+        getItem(position).getName().toString()
+      )
+    );
+    viewHolder.tvSlots.setText(String.format("%s %s",
+        mContext.getString(R.string.tv_label_box_slot),
+        getItem(position).getSlots().toString()
+      )
+    );
+    viewHolder.tvDescription.setText(String.format("%s %s",
+        mContext.getString(R.string.tv_label_box_description),
+        getItem(position).getDescription().toString()
+      )
+    );
+  }
+
   private void editBackground(int position, ViewHolder viewHolder) {
     if (position % 2 == 0) {
-      viewHolder.root.setBackgroundColor(context.getResources().getColor(R.color.white));
+      viewHolder.root.setBackgroundColor(mContext.getResources().getColor(R.color.white));
     } else {
-      viewHolder.root.setBackgroundColor(context.getResources().getColor(R.color.lightGray));
+      viewHolder.root.setBackgroundColor(mContext.getResources().getColor(R.color.lightGray));
     }
   }
 
-  private void fillViewWithData(int position, ViewHolder viewHolder) {
-    viewHolder.tvId.setText(context.getString(R.string.tv_label_item_id) + " " + getItem(position).getId().toString());
-    viewHolder.tvName.setText(context.getString(R.string.tv_label_box_name) + " " + getItem(position).getName());
-    viewHolder.tvSize.setText(context.getString(R.string.tv_label_box_size) + " " + getItem(position).getSlots());
-    viewHolder.tvDescription.setText(context.getString(R.string.tv_label_box_description) + " " + getItem(position).getDescription());
-  }
-
-  //Inner class
+  //Inner class to strore ViewHolder Properties
   static class ViewHolder {
     LinearLayout root;
     TextView tvId;
     TextView tvName;
-    TextView tvSize;
+    TextView tvSlots;
     TextView tvDescription;
   }
 

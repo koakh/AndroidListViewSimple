@@ -34,7 +34,7 @@
       android:layout_height="wrap_content"
       android:layout_marginLeft="10dp"
       android:layout_marginTop="5dp"
-      android:text="@string/tv_label_box_size"
+      android:text="@string/tv_label_box_slot"
       android:textSize="17sp"
       android:textStyle="bold"/>
 
