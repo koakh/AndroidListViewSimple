@@ -5,6 +5,7 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.UUID;
 
 public class BoxRepository {
 
@@ -23,7 +24,7 @@ public class BoxRepository {
    * @param id
    * @return Object
    */
-  public static Box getFromObjectId(Context context, long id) {
+  public static Box getFromObjectId(Context context, UUID id) {
 
     Box iterBox = null;
     Iterator<Box> iterator = repositoryData.iterator();
@@ -41,18 +42,17 @@ public class BoxRepository {
 
   /**
    * Create a Fake Moked Box
-   * @param position
-   * @return
+   * @return Object
    */
-  public static Box getFakeBox(long position) {
+  public static Box getFakeBox() {
 
     long randomVal = MIN + (int) (Math.random() * ((MAX - MIN) + 1));
 
     return new Box(
-      position,
-      String.format("BoxId %d", position),
+      getNextId(),
+      String.format("BoxId %d", randomVal),
       (int) randomVal,
-      String.format("Description BoxId %d", position)
+      String.format("Description BoxId %d", randomVal)
     );
   }
 
@@ -60,8 +60,12 @@ public class BoxRepository {
    * Get Next Valid ObjectId
    * @return
    */
-  public static Long getNextId() {
+  public static UUID getNextId() {
 
+    //generate random UUIDs
+    return UUID.randomUUID();
+
+    /*
     Box iterBox = null;
     long nextId = 0L;
 
@@ -78,6 +82,7 @@ public class BoxRepository {
     }
     nextId++;
     return nextId;
+    */
   }
 
   /**
@@ -93,7 +98,7 @@ public class BoxRepository {
       repositoryData = new ArrayList<Box>();
 
       for (int i = 0; i < repositorySize; i++) {
-        repositoryData.add(getFakeBox(i));
+        repositoryData.add(getFakeBox());
         Log.d(App.getTAG(), String.format("mockData Box Id: %d", i));
       }
     }
@@ -109,7 +114,8 @@ public class BoxRepository {
   public static void insertOrUpdate(Context context, Box box) {
 
     if (repositoryData.contains(box)) {
-      int id = box.getId().intValue();
+//int id = box.getId().intValue();
+      int id = repositoryData.indexOf(box);
       repositoryData.get(id).setName(box.getName());
       repositoryData.get(id).setSlots(box.getSlots());
       repositoryData.get(id).setDescription(box.getDescription());
@@ -127,7 +133,7 @@ public class BoxRepository {
    * @param context
    * @param id
    */
-  public static void deleteBoxWithId(Context context, long id) {
+  public static void deleteBoxWithId(Context context, UUID id) {
     Box box = getFromObjectId(context, id);
     //int index = repositoryData.indexOf(box);
     repositoryData.remove(box);

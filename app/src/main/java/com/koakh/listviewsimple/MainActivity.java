@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
   }
 
   private void deleteItem() {
-    BoxRepository.deleteBoxWithId(MainActivity.this, mListViewId);
+//BoxRepository.deleteBoxWithId(MainActivity.this, mListViewId);
   }
 
   private void addItems() {

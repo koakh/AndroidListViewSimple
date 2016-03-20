@@ -12,6 +12,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.UUID;
+
 public class EditBoxActivity extends AppCompatActivity {
 
   private Button btnSave;
@@ -19,7 +21,7 @@ public class EditBoxActivity extends AppCompatActivity {
   private EditText etBoxSlots;
   private EditText etBoxDescription;
 
-  private long boxId;
+  private UUID boxId;
   private Box box;
 
   @Override
@@ -34,7 +36,9 @@ public class EditBoxActivity extends AppCompatActivity {
 
     //Assign boxId and box from bundle Extras
     if (getIntent() != null && getIntent().getExtras() != null) {
-      boxId = getIntent().getExtras().getLong("boxId");
+      //boxId = UUID.fromString(getIntent().getExtras().getString("boxId"));
+      //get UUID From Object
+      boxId = (UUID) getIntent().getExtras().get("boxId");
       box = BoxRepository.getFromObjectId(EditBoxActivity.this, boxId);
     }
 
